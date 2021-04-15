@@ -5,16 +5,12 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>blogpost</title>
 </head>
 <body>
-    <ul>
-        @foreach($posts as $post)
-            <li><a href="#">{{ $post->title }}</a></li>
-        @endforeach
-    </ul>
-
-    {{ $posts->links() }}
-
+    {{$post->title}}
+    @can('update', $post)
+        <a href="#">update the post</a>
+    @endcan
 </body>
 </html>

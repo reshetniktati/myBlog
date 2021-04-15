@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\PostController;
+use App\Http\controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,9 +21,11 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::get('/', [WelcomeController::class, 'index']);
+
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::prefix('posts')->group(function() {
-    Route::get('/', [App\Http\Controllers\PostController::class, 'index'])->name('posts.index');
-    Route::get('/{post}', [\App\Http\Controllers\PostController::class, 'show']);
+    Route::get('/', [PostController::class, 'index'])->name('posts.index');
+    Route::get('/{id}', [PostController::class, 'show']);
 });

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {
@@ -14,6 +16,8 @@ class PostController extends Controller
      */
     public function index()
     {
+//        $user = User::find(1);
+
        return view('posts.index', [
            'posts' => Post::paginate(10),
        ]);
@@ -46,9 +50,18 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function show(Post $post)
+    public function show(Post $id)
     {
-//        'post' => $post;
+        $post = Post::all()->find($id);
+//        dd($post);
+//        auth()->loginUsingId(1);
+        if (Gate::denies('update', $post)){
+            abort(403, 'not allow');
+        }
+
+        return view('posts.show', [
+            'post'=>$post,
+        ]);
     }
 
     /**
