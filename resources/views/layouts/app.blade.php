@@ -76,7 +76,7 @@
             </div>
         </nav>
 
-        <main class="py-4">
+        <main class="py-4 mx-auto" style="max-width:940px;">
             @yield('content')
         </main>
     </div>

@@ -2,22 +2,25 @@
 
 @section('content')
 
-    <div>
-        <h1>My blog</h1>
+    <div class="container-fluid mx-auto pb-4" style="width: 300px; color: red;">
+        <h1 style="font-size: 50px; font-weight: 900">My blog</h1>
         <span>read & write whatever you want</span>
     </div>
     <div>
-        <h4>recently added</h4>
+        <p style="font-size: 18px; color: #727272">recently added:</p>
         <div>
             @foreach($posts as $post)
-                <p>{{$post->title}}</p>
+                <h3>{{$post->title}}</h3>
+                <hr>
             @endforeach
         </div>
-        @if(Auth::check())
-            <a href="/posts">see all</a>
-        @else
-            Login/register to see more!
-        @endif
+        <div style="color: red;">
+            @if(Auth::check())
+                <a href="/posts">see all</a>
+            @else
+                <p>Login/register to see more!</p>
+            @endif
+        </div>
     </div>
 
 @endsection

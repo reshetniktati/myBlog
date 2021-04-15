@@ -16,7 +16,6 @@ class PostController extends Controller
      */
     public function index()
     {
-//        $user = User::find(1);
 
        return view('posts.index', [
            'posts' => Post::paginate(10),
@@ -53,8 +52,6 @@ class PostController extends Controller
     public function show(Post $id)
     {
         $post = Post::all()->find($id);
-//        dd($post);
-//        auth()->loginUsingId(1);
         if (Gate::denies('update', $post)){
             abort(403, 'not allow');
         }
