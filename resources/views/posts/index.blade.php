@@ -1,20 +1,19 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-    <ul>
-        @foreach($posts as $post)
-            <li><a href="#">{{ $post->title }}</a></li>
-        @endforeach
-    </ul>
+@extends('layouts.app')
+
+@section('content')
+    <div>
+        <div class="container">
+            <div class="col-md-8">
+                @foreach($posts as $post)
+                    <div class="card">
+                        <a href="{{route('posts.show', ['id'=>$post->id])}}" class="card-header">{{ $post->title }}</a>
+                        <p class="card-body">{{ $post->body }}</p>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
 
     {{ $posts->links() }}
 
-</body>
-</html>
+@endsection

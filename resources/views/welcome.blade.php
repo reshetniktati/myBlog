@@ -16,7 +16,7 @@
         </div>
         <div style="color: red;">
             @if(Auth::check())
-                <a href="/posts">see all</a>
+                <a href="{{route('posts.index')}}" style="color: red;">see all -></a>
             @else
                 <p>Login/register to see more!</p>
             @endif

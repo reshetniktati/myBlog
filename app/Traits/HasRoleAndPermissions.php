@@ -2,7 +2,6 @@
 
 namespace App\Traits;
 
-use App\Models\Role;
 use App\Models\Permission;
 
 /**
@@ -11,22 +10,6 @@ use App\Models\Permission;
  * @package App\Traits
  */
 trait HasRoleAndPermissions {
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class,'users_roles');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function permissions()
-    {
-        return $this->belongsToMany(Permission::class,'users_permissions');
-    }
 
     /**
      * @param mixed ...$roles
@@ -47,7 +30,7 @@ trait HasRoleAndPermissions {
      */
     public function hasPermission($permission_id) :bool
     {
-        $this->permissions->where('id', $permission_id)->count();
+        return $this->permissions->where('id', $permission_id)->count();
     }
 
     /**
@@ -100,14 +83,14 @@ trait HasRoleAndPermissions {
         return $this;
     }
 
-    public function deletePermissions(... $permissions )
+    public function deletePermissions(...$permissions )
     {
         $permissions = $this->getAllPermissions($permissions);
         $this->permissions()->detach($permissions);
         return $this;
     }
 
-    public function refreshPermissions(... $permissions )
+    public function refreshPermissions(...$permissions )
     {
         $this->permissions()->detach();
         return $this->givePermissionsTo($permissions);

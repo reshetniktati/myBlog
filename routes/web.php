@@ -27,5 +27,5 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::prefix('posts')->group(function() {
     Route::get('/', [PostController::class, 'index'])->name('posts.index');
-    Route::get('/{id}', [PostController::class, 'show']);
+    Route::get('/{id}', [PostController::class, 'show'])->name('posts.show');
 });
