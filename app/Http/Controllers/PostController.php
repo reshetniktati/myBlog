@@ -16,9 +16,8 @@ class PostController extends Controller
      */
     public function index()
     {
-
        return view('posts.index', [
-           'posts' => Post::paginate(10),
+           'posts' => Post::latest()->paginate(10),
        ]);
     }
 
@@ -29,7 +28,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('posts.create');
     }
 
     /**
@@ -40,7 +39,23 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $post = new Post();
+        $id = auth()->user()->id;
+
+        request()->validate([
+            'title' => ['required'],
+            'teaser' => ['nullable'],
+            'body' => ['required'],
+        ]);
+
+        $post->title = request('title');
+        $post->body = request('description');
+        $post->teaser = request('teaser');
+        $post->user_id = $id;
+
+        $post->save();
+
+        return redirect('/posts');
     }
 
     /**
@@ -51,13 +66,13 @@ class PostController extends Controller
      */
     public function show(Post $id)
     {
-        $post = Post::all()->find($id);
+        $post = Post::all()->findOrFail($id);
         if (Gate::denies('update', $post)){
             abort(403, 'not allow');
         }
 
         return view('posts.show', [
-            'post'=>$post,
+            'post' => $post,
         ]);
     }
 

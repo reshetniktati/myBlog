@@ -10002,3 +10002,18 @@ h3 {
     border-color: #dee2e6;
   }
 }
+
+
+ /*********************************________my_styles_______***************************************/
+.create-post-wrapper {
+
+}
+
+.create-post-wrapper .field{
+    margin: 15px;
+}
+
+.create-post-wrapper .field input, textarea {
+    width: 100%;
+}
+

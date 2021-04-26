@@ -11,6 +11,10 @@ class PostPolicy
 {
     use HandlesAuthorization;
 
+    public function view(User  $user, Post $post)
+    {
+        return Auth::check();
+    }
 
     public function update(User $user, Post $post)
     {
@@ -24,6 +28,6 @@ class PostPolicy
 
     public function create(User $user)
     {
-        return Auth::check() || $user->hasRole('admin');
+        return Auth::check();
     }
 }
