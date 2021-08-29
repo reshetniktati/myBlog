@@ -30,4 +30,6 @@ Route::prefix('posts')->group(function() {
     Route::post('/', [PostController::class, 'store']);
     Route::get('/create', [PostController::class, 'create'])->name('posts.create');
     Route::get('/{id}', [PostController::class, 'show'])->name('posts.show');
+    Route::put('/{id}', [PostController::class, 'update']);
+    Route::get('/{id}/edit', [PostController::class, 'edit'])->name('posts.edit');
 });

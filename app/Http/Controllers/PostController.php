@@ -39,17 +39,18 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $post = new Post();
-        $id = auth()->user()->id;
 
-        request()->validate([
+        $request->validate([
             'title' => ['required'],
             'teaser' => ['nullable'],
             'body' => ['required'],
         ]);
 
+        $post = new Post();
+        $id = auth()->user()->id;
+
         $post->title = request('title');
-        $post->body = request('description');
+        $post->body = request('body');
         $post->teaser = request('teaser');
         $post->user_id = $id;
 
@@ -66,7 +67,7 @@ class PostController extends Controller
      */
     public function show(Post $id)
     {
-        $post = Post::all()->findOrFail($id);
+        $post = Post::all()->find($id);
         if (Gate::denies('update', $post)){
             abort(403, 'not allow');
         }
@@ -82,9 +83,13 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function edit(Post $post)
+    public function edit(Request $request, Post $id)
     {
-        //
+        $post = Post::all()->find($id);
+
+        return view('posts.edit', [
+            'post' => $post,
+        ]);
     }
 
     /**
@@ -94,9 +99,26 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(Request $request, Post $id)
     {
-        //
+        $request->validate([
+            'title' => ['required'],
+            'teaser' => ['nullable'],
+            'body' => ['required'],
+        ]);
+
+        $user_id = auth()->user()->id;
+
+        $post = Post::all()->find($id);
+
+        $post->title = request('title');
+        $post->body = request('body');
+        $post->teaser = request('teaser');
+        $post->user_id = $user_id;
+
+        $post->save();
+
+        return redirect('/posts/'. $post->id);
     }
 
     /**

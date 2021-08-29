@@ -19,7 +19,11 @@
                 @enderror
             </div>
             <div class="field mx-auto">
-                <input type="text" placeholder="Discribe main storyline" name="teaser">
+                <input
+                    type="text"
+                    placeholder="Describe main storyline"
+                    name="teaser"
+                >
             </div>
             <div class="field mx-auto">
                 <textarea
