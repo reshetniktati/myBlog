@@ -5,9 +5,13 @@
         <div class="container">
             <div class="col-md-8">
                 @foreach($posts as $post)
-                    <div class="card">
-                        <a href="{{route('posts.show', ['id'=>$post->id])}}" class="card-header">{{ $post->title }}</a>
-                        <p class="card-body">{{ $post->body }}</p>
+                    <div class="card my-4">
+                        <a href="{{ route('posts.show', ['post'=>$post]) }}" class="card-header">{{ $post->title }}</a>
+                        <div class="card-body">
+                            <span class="text-monospace text-muted">author: {{ $post->user->name }}</span>
+                            <p class="card-body">{{ $post->body }}</p>
+                        </div>
+
                     </div>
                 @endforeach
             </div>

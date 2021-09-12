@@ -2,13 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewPostAdded;
 use App\Models\Post;
+use App\Models\Subscriber;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Route;
 
 class PostController extends Controller
 {
+
+    public function validatePost() {
+        return request()->validate([
+            'title' => ['required'],
+            'teaser' => ['nullable'],
+            'body' => ['required'],
+        ]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +28,8 @@ class PostController extends Controller
     public function index()
     {
        return view('posts.index', [
-           'posts' => Post::latest()->paginate(10),
+           'posts' => Post::with('user')->latest()->paginate(10),
+           'user' => auth()->user()->name,
        ]);
     }
 
@@ -37,24 +49,25 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store()
     {
+        $subscribers = Subscriber::all()->pluck('subscriber_user_id')->toArray();
 
-        $request->validate([
-            'title' => ['required'],
-            'teaser' => ['nullable'],
-            'body' => ['required'],
-        ]);
-
-        $post = new Post();
         $id = auth()->user()->id;
+//        dd(User::where('id', 3)->first()->name);
 
-        $post->title = request('title');
-        $post->body = request('body');
-        $post->teaser = request('teaser');
-        $post->user_id = $id;
 
-        $post->save();
+        foreach ($subscribers as $subscriber_id) {
+            $subscriber = User::where('id', $subscriber_id)->first();
+            event(new NewPostAdded(auth()->user(), $subscriber));
+        }
+
+        Post::create(
+            array_merge(
+                ['user_id' => $id],
+                $this->validatePost(),
+            )
+        );
 
         return redirect('/posts');
     }
@@ -65,12 +78,11 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function show(Post $id)
+    public function show(Post $post)
     {
-        $post = Post::all()->find($id);
-        if (Gate::denies('update', $post)){
-            abort(403, 'not allow');
-        }
+//        if (Gate::denies('update', $post)){
+//            abort(403, 'not allow');
+//        }
 
         return view('posts.show', [
             'post' => $post,
@@ -83,10 +95,8 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, Post $id)
+    public function edit(Post $post)
     {
-        $post = Post::all()->find($id);
-
         return view('posts.edit', [
             'post' => $post,
         ]);
@@ -99,24 +109,14 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $id)
+    public function update(Post $post)
     {
-        $request->validate([
-            'title' => ['required'],
-            'teaser' => ['nullable'],
-            'body' => ['required'],
-        ]);
-
         $user_id = auth()->user()->id;
 
-        $post = Post::all()->find($id);
-
-        $post->title = request('title');
-        $post->body = request('body');
-        $post->teaser = request('teaser');
-        $post->user_id = $user_id;
-
-        $post->save();
+        $post->update(array_merge(
+            ['user_id' => $user_id],
+            $this->validatePost(),
+        ));
 
         return redirect('/posts/'. $post->id);
     }
@@ -129,6 +129,8 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        $post->delete();
+
+        return redirect('/posts/');
     }
 }
