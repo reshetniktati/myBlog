@@ -4,8 +4,7 @@
     <h1>{{$post->title}}</h1>
     by <span>{{$post->user->name}}</span>
     @if(auth()->user()->id !== $post->user->id)
-        <span class="ml-4 text-info">Subscribe on this author</span>
-        <a href="{{route('subscribe.index', ['post'=>$post])}}" class="card-header">Subscribe on this author</a>
+        <a href="{{route('subscribe.index', ['post'=>$post])}}" class="ml-4 text-info">Subscribe on this author</a>
     @endif
     <hr>
 

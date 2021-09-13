@@ -80,9 +80,10 @@
             </div>
         </nav>
 
-        <main class="py-4 mx-auto" style="max-width:940px;">
+        <main id="app" class="py-4 mx-auto" style="max-width:940px;">
             @yield('content')
         </main>
     </div>
+    <script src="/js.app.js"></script>
 </body>
 </html>

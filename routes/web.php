@@ -2,7 +2,8 @@
 
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\SubscriptionController;
-use App\Http\controllers\WelcomeController;
+use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,11 +16,6 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Auth::routes();
 
 Route::get('/', [WelcomeController::class, 'index']);
@@ -39,5 +35,9 @@ Route::prefix('posts')->group(function() {
         Route::get('/subscribe', [SubscriptionController::class, 'index'])->name('subscribe.index');
         Route::post('/subscribe', [SubscriptionController::class, 'store'])->name('posts.subscribe');
     });
+});
+
+Route::prefix('users')->group(function() {
+    Route::get('/', [UserController::class, 'index'])->name('users.index');
 });
 

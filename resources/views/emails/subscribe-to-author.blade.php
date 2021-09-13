@@ -6,7 +6,7 @@
 
 <p>For now and on you'll me subscribed to {{$author}}, don't miss any news =)</p>
 
-@component('mail::button', ['url' => 'http://127.0.0.1:8000/'])
+@component('mail::button', ['url' => route('posts.index')])
     Back Home
 @endcomponent
 

@@ -5,7 +5,7 @@
 
 <p>There is something new from {{$author->name}}</p>
 
-@component('mail::button', ['url' => 'http://127.0.0.1:8000/posts'])
+@component('mail::button', ['url' => route('posts.index')])
     See all
 @endcomponent
 
